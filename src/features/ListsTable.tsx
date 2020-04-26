@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import { GlobalStateContext } from '../GlobalState';
 
@@ -26,7 +27,9 @@ const Lists = () => {
           </div>
           {lists.map(({ id, name }) => (
             <div key={id} className={styles.row}>
-              <div className={styles.column}>{name}</div>
+              <div className={styles.column}>
+                <Link to={`/lists/${id}`}>{name}</Link>
+              </div>
               {/* TODO: Get the task completion */}
               <div className={styles.column}>1 complete, 1 incomplete</div>
             </div>
