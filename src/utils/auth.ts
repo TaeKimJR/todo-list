@@ -56,3 +56,15 @@ export const authenticate = async (email: string, password: string) => {
     return null;
   }
 };
+
+/**
+ * Returns true after unauthenticating the User for this client.
+ *
+ * Unfortunately with the current implementation, the previous token can
+ * still be used by other clients for up to 24 hours.
+ */
+export const unauthenticate = () => {
+  // TODO: Ask API to invalidate token.
+  cookies.remove(TOKEN_COOKIE_NAME);
+  return true;
+};
