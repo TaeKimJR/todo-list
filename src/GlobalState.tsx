@@ -33,6 +33,8 @@ export const GlobalActionsContext = React.createContext({
   createList: (list: List) => {},
   initializeList: (list: List) => {},
   createTask: (listId: number, task: Task) => {},
+  completeTask: (listId: number, taskId: number) => {},
+  incompleteTask: (listId: number, taskId: number) => {},
 });
 
 // TODO: Test reducer.
@@ -51,7 +53,7 @@ const reducer = (state: State, action: Action) => {
 
     case 'INITIALIZE_LIST': {
       const newList = action.data;
-      const listIndex = state.lists.findIndex(({ id }) => (id = newList.id));
+      const listIndex = state.lists.findIndex(({ id }) => id === newList.id);
       let nextLists = [...state.lists];
       if (listIndex > -1) {
         nextLists[listIndex] = newList;
@@ -65,7 +67,7 @@ const reducer = (state: State, action: Action) => {
     case 'CREATE_TASK': {
       const { listId, task } = action.data;
 
-      const listIndex = state.lists.findIndex(({ id }) => (id = listId));
+      const listIndex = state.lists.findIndex(({ id }) => id === listId);
       let nextLists = [...state.lists];
 
       if (listIndex > -1) {
@@ -74,6 +76,30 @@ const reducer = (state: State, action: Action) => {
 
         nextList.tasks = nextTasks ? [...nextTasks, task] : [task];
         nextLists[listIndex] = nextList;
+      }
+
+      return { ...state, lists: nextLists };
+    }
+
+    case 'SET_TASK_COMPLETE': {
+      const { listId, taskId, complete } = action.data;
+
+      const listIndex = state.lists.findIndex(({ id }) => id === listId);
+      let nextLists = [...state.lists];
+
+      if (listIndex > -1) {
+        const nextList = { ...nextLists[listIndex] };
+        const nextTasks = [...nextList.tasks];
+        const taskIndex = nextTasks.findIndex(({ id }) => id === taskId);
+
+        if (taskIndex > -1) {
+          const nextTask = { ...nextTasks[taskIndex] };
+          nextTask.complete = complete;
+
+          nextTasks[taskIndex] = nextTask;
+          nextList.tasks = nextTasks;
+          nextLists[listIndex] = nextList;
+        }
       }
 
       return { ...state, lists: nextLists };
@@ -115,8 +141,25 @@ const GlobalState = ({ children }: Props) => {
     [dispatch]
   );
 
+  // Appends a new task to the end of a List's task array.
   const createTask = React.useCallback((listId: number, task: Task) => {
     dispatch({ type: 'CREATE_TASK', data: { listId, task } });
+  }, []);
+
+  // Sets the "complete" flag to true on a task.
+  const completeTask = React.useCallback((listId: number, taskId: number) => {
+    dispatch({
+      type: 'SET_TASK_COMPLETE',
+      data: { listId, taskId, complete: true },
+    });
+  }, []);
+
+  // Sets the "complete" flag to false on a task.
+  const incompleteTask = React.useCallback((listId: number, taskId: number) => {
+    dispatch({
+      type: 'SET_TASK_COMPLETE',
+      data: { listId, taskId, complete: false },
+    });
   }, []);
 
   // All actions that can affect the global state.
@@ -126,8 +169,17 @@ const GlobalState = ({ children }: Props) => {
       createList,
       initializeList,
       createTask,
+      completeTask,
+      incompleteTask,
     }),
-    [createList, createTask, initializeList, initializeLists]
+    [
+      completeTask,
+      createList,
+      createTask,
+      incompleteTask,
+      initializeList,
+      initializeLists,
+    ]
   );
 
   return (

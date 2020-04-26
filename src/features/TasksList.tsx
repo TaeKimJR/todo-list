@@ -1,6 +1,8 @@
 import React from 'react';
 
-import { useGetListbyId } from '../GlobalState';
+import { getAuthToken } from '../utils/auth';
+
+import { GlobalActionsContext, useGetListbyId } from '../GlobalState';
 
 type Props = {
   listId: number;
@@ -11,10 +13,47 @@ type Props = {
  */
 const TasksList = ({ listId }: Props) => {
   const list = useGetListbyId(listId);
+  const { completeTask, incompleteTask } = React.useContext(
+    GlobalActionsContext
+  );
 
-  const toggleTask = (taskId: number) => {
-    // TODO: Handle toggling a task.
-    console.log(taskId);
+  const toggleTask = async (taskId: number, complete: boolean) => {
+    // Set the UI immediately to provide instant feedback to the User. The server might be slow
+    // to send a response, which will make the checkbox laggy.
+    if (complete) {
+      completeTask(listId, taskId);
+    } else {
+      incompleteTask(listId, taskId);
+    }
+
+    const authToken = getAuthToken();
+
+    const req = await fetch(
+      `${process.env.REACT_APP_APP_URL}/list/${listId}/task/${taskId}/complete?token=${authToken}`,
+      {
+        // Based on if we are completing or incompleting a task, use PUT vs DELETE.
+        method: complete ? 'PUT' : 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    if (!req.ok) {
+      alert('Uh oh, something went wrong. Please try refreshing the page.');
+
+      // Because we immediately set the checkbox before... if there is an error revert our
+      // update.
+      if (!complete) {
+        completeTask(listId, taskId);
+      } else {
+        incompleteTask(listId, taskId);
+      }
+
+      return;
+    }
+
+    await req.json();
   };
 
   if (!list) {
@@ -33,7 +72,7 @@ const TasksList = ({ listId }: Props) => {
             <input
               type="checkbox"
               checked={complete}
-              onChange={() => toggleTask(id)}
+              onChange={() => toggleTask(id, !complete)}
             />
             {title}
           </label>
