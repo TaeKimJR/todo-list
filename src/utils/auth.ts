@@ -72,3 +72,11 @@ export const unauthenticate = () => {
   cookies.remove(TOKEN_COOKIE_NAME);
   return true;
 };
+
+/**
+ * Returns the User's auth token, if it exists.
+ */
+export const getAuthToken = () => {
+  const authToken = cookies.get(TOKEN_COOKIE_NAME);
+  return authToken;
+};
