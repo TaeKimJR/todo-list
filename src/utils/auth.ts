@@ -41,6 +41,10 @@ export const authenticate = async (email: string, password: string) => {
         // TODO: alert() is placeholder for some nice error handling.
         alert('You entered an incorrect password. Please try again.');
       }
+      // [Error] We missed something...
+      else {
+        alert('Uh oh, something went wrong. Please try again.');
+      }
 
       return null; // Return null for error.
     }
