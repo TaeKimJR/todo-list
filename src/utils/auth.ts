@@ -48,8 +48,7 @@ export const authenticate = async (email: string, password: string) => {
     const response = await req.json();
     const { token } = response;
 
-    // TODO: Figure out correct expiration date. Currently set to 7 days.
-    cookies.set(TOKEN_COOKIE_NAME, token, { expires: 7 });
+    cookies.set(TOKEN_COOKIE_NAME, token, { expires: 1 });
 
     return token;
   } catch (e) {
