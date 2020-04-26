@@ -1,13 +1,9 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Redirect } from 'react-router-dom';
 
 import { isAuthenticated } from './utils/auth';
 import PrivateRoute from './shared/PrivateRoute';
+import PublicOnlyRoute from './shared/PublicOnlyRoute';
 
 import Login from './pages/Login';
 import Lists from './pages/Lists';
@@ -24,9 +20,13 @@ function App() {
       <Router>
         <Switch>
           {/* PUBLIC ROUTES */}
-          <Route path="/login">
+          <PublicOnlyRoute
+            path="/login"
+            redirectTo="/lists"
+            isAuthenticated={isAuthenticated}
+          >
             <Login />
-          </Route>
+          </PublicOnlyRoute>
 
           {/* PRIVATE ROUTES */}
           <PrivateRoute

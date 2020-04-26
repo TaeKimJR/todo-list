@@ -1,27 +1,27 @@
 import React from 'react';
 import { Route, Redirect, RouteProps } from 'react-router-dom';
 
-type PrivateRouteProps = {
+type PublicOnlyRouteProps = {
   children: React.ReactNode;
   redirectTo: string;
   isAuthenticated: () => boolean;
 } & RouteProps;
 
 /**
- * A wrapper for <Route> that redirects the User if they are not authenticated.
+ * A wrapper for <Route> that redirects the User if they are already authenticated.
  * See https://reacttraining.com/react-router/web/example/auth-workflow for more info.
  */
-const PrivateRoute = ({
+const PublicOnlyRoute = ({
   children,
   redirectTo,
   isAuthenticated,
   ...rest
-}: PrivateRouteProps) => {
+}: PublicOnlyRouteProps) => {
   return (
     <Route
       {...rest}
       render={({ location }) =>
-        isAuthenticated() ? (
+        !isAuthenticated() ? (
           children
         ) : (
           <Redirect
@@ -36,4 +36,4 @@ const PrivateRoute = ({
   );
 };
 
-export default PrivateRoute;
+export default PublicOnlyRoute;
