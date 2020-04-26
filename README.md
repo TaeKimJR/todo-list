@@ -5,6 +5,11 @@ Created by Tae Kim.
 ## Getting Started
 
 To begin the application, run the following commands in terminal...
+- Create a `.env` file at the root of your project and add the following environment variables:
+
+```
+REACT_APP_APP_URL=https://testing-interview-todo-xxxxxxxxxx-xx.a.run.app
+```
 
 - `yarn`
 - `yarn start` 
