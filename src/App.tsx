@@ -1,29 +1,32 @@
 import React from 'react';
-import logo from './logo.svg';
-import styles from './App.module.scss';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-type Props = {
-  foo: string;
-};
+import Login from './pages/Login';
+import Lists from './pages/Lists';
+import List from './pages/List';
 
-function App(_: Props) {
+/**
+ * The App is the top-level component. This component should be used for...
+ * - Creating the App Shell
+ * - Setting up top-level Routing
+ */
+function App() {
   return (
-    <div className={styles.app}>
-      <header className={styles.appHeader}>
-        <img src={logo} className={styles.appLogo} alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className={styles.appLink}
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <main>
+      <Router>
+        <Switch>
+          <Route path="/login">
+            <Login />
+          </Route>
+          <Route path="/lists" exact>
+            <Lists />
+          </Route>
+          <Route path="/lists/:listId">
+            <List />
+          </Route>
+        </Switch>
+      </Router>
+    </main>
   );
 }
 
