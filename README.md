@@ -1,10 +1,10 @@
 # Todo List
 
-Created by Tae Kim
+Created by Tae Kim.
 
 ## Getting Started
 
-To begin the application, do the following...
+To begin the application, run the following commands in terminal...
 
 - `yarn`
 - `yarn start` 
