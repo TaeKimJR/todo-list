@@ -37,3 +37,12 @@ Here are directions to get your development environment setup within [Visual Stu
 - Type `"Preferences: Open Workspace Settings"`
 - Search for `"Format on Save"`
 - Check the checkmark.
+
+## TODO's
+- Loading states. This woulda required a little extra work. You will probably see a flash of "There are no lists/tasks/etc" because of this.
+- Add more tests. I left some as examples, but opted to do more development given the time.
+- Split up bundle by Pages (async loading). No need to make the User load your entire app.
+- Style the App. It's all native HTML right now.
+- "Project Structure" in README. For new developers, it's important for them to have onboarding material to ramp them up quickly and efficiently. They will appreciate it.
+- Introduce [react-query](https://github.com/tannerlinsley/react-query). This will help manage server-side state and caching.
+- Consider something like [Tailwind CSS](https://tailwindcss.com/) for styling. It's great for most of the styling, we can always do custom stuff with CSS Modules.
